@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+player_status=`exec dbus-send --print-reply \
+    --session \
+    --dest=org.mpris.MediaPlayer2.spotify \
+    /org/mpris/MediaPlayer2 \
+    org.freedesktop.DBus.Properties.Get \
+    string:'org.mpris.MediaPlayer2.Player' \
+    string:'PlaybackStatus' 2> /dev/null |\
+    grep -oP 'string "\K[^"]+'`
+
+if [ "$player_status" == "Playing" ]; then
+    title=`exec dbus-send --print-reply \
+        --session \
+        --dest=org.mpris.MediaPlayer2.spotify \
+        /org/mpris/MediaPlayer2 \
+        org.freedesktop.DBus.Properties.Get \
+        string:'org.mpris.MediaPlayer2.Player' \
+        string:'Metadata' |\
+        grep -A1 'xesam:title' |\
+        grep -oP 'string "\K[^"]+' |\
+        tail -n 1`
+
+    artist=`exec dbus-send --print-reply \
+        --session \
+        --dest=org.mpris.MediaPlayer2.spotify \
+        /org/mpris/MediaPlayer2 \
+        org.freedesktop.DBus.Properties.Get \
+        string:'org.mpris.MediaPlayer2.Player' string:'Metadata' |\
+        grep -A2 'xesam:artist' |\
+        grep -oP 'string "\K[^"]+' |\
+        tail -n 1`
+
+    echo "$title - $artist"
+else
+    echo "Not playing"
+fi
+

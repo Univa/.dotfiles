@@ -1,0 +1,48 @@
+#!/bin/bash
+
+#
+# bspwmrc
+#
+
+# Restore previous colorscheme
+set-colors $(cat ${HOME}/.cache/wal/wal) -o $(cat ${HOME}/.cache/wal/alpha)
+
+desktops=(I II III IV V VI VII VIII IX X)
+size=$((${#desktops[@]} / $(xrandr | grep -w "connected" | wc -l)))
+pos=0
+
+# Set up the first monitor as the primary monitor
+xrandr --output $(xrandr | grep -w "connected" | cut -d ' ' -f1 | head -n 1) --primary
+
+# Set up bspwm desktops on every connected monitor
+for monitor in $(xrandr | grep -w "connected" | cut -d ' ' -f1); do
+    echo $monitor
+    bspc monitor $monitor -d ${desktops[@]:$(($size * $pos)):$size}
+    pos=$((pos + 1))
+done
+
+bspc rule -r *:*
+bspc rule -a firefox desktop=^1 follow=on
+bspc rule -a firefox:Places state=floating
+bspc rule -a URxvt rectangle=700x600+0+0 center=on
+bspc rule -a URxvt:calcurse desktop=^2
+bspc rule -a Zathura desktop=^3 follow=on state=tiled
+bspc rule -a discord desktop=^6 follow=on
+bspc rule -a obs desktop=^8 follow=on
+bspc rule -a Spotify desktop=^7 follow=on
+
+width=$(xrandr | grep -w "primary" | grep -o '[0-9]*x[0-9]*+[0-9]*+[0-9]*' | cut -d 'x' -f1)
+echo $width
+
+bspc config border_width         2
+bspc config window_gap           $(awk "BEGIN {printf \"%s\n\", $width * 0.010417}")
+
+bspc config split_ratio          0.50
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+# Run programs on startup
+run-programs
+
+notify-send "bspwm configuration loaded"
+

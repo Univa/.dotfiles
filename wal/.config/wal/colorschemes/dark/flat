@@ -1,0 +1,32 @@
+{
+    "wallpaper": "/home/kevin/Wallpapers/bg.png",
+    "alpha": "100",
+    "special": {
+        "background": "#001225",
+        "background2 (color2 now)": "#00325F",
+        "foreground": "#FFFFFF",
+        "elmnt-dark (deprecated)": "#002244",
+        "elmnt-bright (color6 now)": "#005091",
+        "elmnt-focus (color5 now)": "#7F0000",
+        "cursor": "#FFFFFF"
+    },
+    "colors": {
+        "color0": "#020914",
+        "color1": "#283747",
+        "color2": "#00325F",
+        "color3": "#374655",
+        "color4": "#535F6C",
+        "color5": "#7F0000",
+        "color6": "#005091",
+        "color7": "#afb4b9",
+        "color8": "#7a7d81",
+        "color9": "#283717",
+        "color10": "#00325F",
+        "color11": "#374655",
+        "color12": "#535F6C",
+        "color13": "#7F0000",
+        "color14": "#005091",
+        "color15": "#afb4b9"
+    }
+}
+

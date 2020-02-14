@@ -1,0 +1,16 @@
+#define termfont cherry
+#define termfontsize 10
+
+URxvt*font: xft:termfont:size=termfontsize
+URxvt*letterSpace: 1
+URxvt*internalBorder: 40
+URxvt*scrollBar: false
+
+Xft.antialias: 1
+Xft.hinting: 1
+Xft.autohint: 0
+Xft.hintstyle: hintfull
+Xft.rgba: rgb
+Xft.lcdfilter: lcddefault
+Xft.dpi: 96
+

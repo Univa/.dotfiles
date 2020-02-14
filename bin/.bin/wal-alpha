@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+# Specify pywal's output directory
+outputdir="${HOME}/.cache/wal"
+
+# Specify path for the file containing the current theme's alpha value
+alphafile="$outputdir/alpha"
+
+# Specify path for the alpha template
+alphatemplate="${HOME}/.config/wal/templates/alpha"
+
+if [ -f "$alphatemplate" ]; then
+    echo "$alphatemplate detected"
+
+    if [ -f "$alphafile" ]; then
+        echo "$alphafile detected"
+
+        # Grab the alpha value from the alpha file
+        alpha=$(cat $alphafile)
+
+        # Convert alpha into a hex value
+        alphahex=$(awk "BEGIN {printf \"%x\n\", $alpha/100*255}")
+
+        # Convert alpha into a decimal value (ex. 0.80 for 80%)
+        alphadec=$(awk "BEGIN {printf \"%.2f\n\", $alpha/100}")
+
+        # Convert alpha into its inverse (ex. 20% instead of 80%)
+        alphainv=$(awk "BEGIN {printf \"%d\n\", 100-$alpha}")
+
+        echo "Alpha value $alpha converted to:"
+        echo "Hex: $alphahex"
+        echo "Decimal: $alphadec"
+        echo "Inverse: $alphainv"
+    else
+        echo "$alphafile not detected"
+        echo "Please run pywal before running this script"
+        exit 1
+    fi
+else
+    echo "$alphatemplate not detected"
+
+    # Create the alpha template automatically
+    echo {alpha} > $alphatemplate
+
+    echo "Alpha template created at $alphatemplate."
+    echo "Re-run pywal, then run this script after."
+    exit 1
+fi
+
+for file in $outputdir/*; do
+    if [ -f "$file" ]; then
+        # Substitute all "(alphahex)" with the alpha in hex format
+        sed -i "s/(alphahex)/$alphahex/g" $file
+
+        # Substitute all "(alphadec)" with the alpha in decimal format
+        sed -i "s/(alphadec)/$alphadec/g" $file
+
+        # Substitute all "(alphainv)" with the alpha in its inverse format
+        sed -i "s/(alphainv)/$alphainv/g" $file
+
+        echo "$file generated."
+    fi
+done
+
+xrdb -merge $outputdir/colors.Xresources
+echo "$outputdir/colors.Xresources merged."
+

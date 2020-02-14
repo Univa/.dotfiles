@@ -1,0 +1,53 @@
+@import "~/.cache/wal/colors.rasi"
+
+* {
+    font: "cherry 8";
+    text-color: @fg;
+    transparent: #00000000;
+}
+
+#window {
+    background-color: @bg;
+    width: 97.9167%;
+    border-color: @color2;
+    border: 2px;
+    location: north;
+    anchor: north;
+    y-offset: 1.8519%;
+    children: [ mainbox ];
+}
+
+#mainbox {
+    background-color: @transparent;
+    orientation: horizontal;
+    margin: 5px 0px;
+    children: [ prompt, entry, listview ];
+}
+
+#prompt {
+    background-color: @transparent;
+    padding: 0px 10px;
+}
+
+#entry {
+    background-color: @transparent;
+    expand: false;
+    width: 500px;
+}
+
+#listview {
+    background-color: @transparent;
+    layout: horizontal;
+    spacing: 1em;
+    padding: 0px 10px;
+}
+
+#element {
+    background-color: @transparent;
+}
+
+#element selected {
+    background-color: @transparent;
+    text-color: @color5;
+}
+

@@ -1,0 +1,46 @@
+
+" vimrc
+"
+
+" Plugins will be downloaded under the specified directory.
+call plug#begin('~/.vim/plugged')
+
+" Declare the list of plugins.
+Plug 'lervag/vimtex'
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-fugitive'
+
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
+
+" Tab settings
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+
+" Show line numbers
+set number
+
+" Show a visual ruler
+highlight ColorColumn ctermbg=1
+set colorcolumn=78
+
+" Python file settings
+autocmd FileType python compiler pylint
+
+" vimtex options
+let g:vimtex_view_method = 'zathura'
+let g:vimtex_view_general_viewer = 'zathura'
+" let g:vimtex_view_forward_search_on_start = 0
+
+" NERDTree settings
+let NERDTreeShowHidden = 1
+let g:NERDTreeWinSize = 35
+let NERDTreeMinimalUI = 1
+
+" Don't write to netrw
+let g:netrw_dirhistmax = 0
+
+" Move .viminfo to ~/.vim
+set viminfo+=n~/.vim/viminfo

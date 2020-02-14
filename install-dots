@@ -1,0 +1,15 @@
+if [ -z "$1" ]; then
+    for d in $(ls -p | grep /); do
+        stow $d
+    done
+elif [ "$1" == "-u" ] || [ "$1" == "--uninstall" ]; then
+    for d in $(ls -p | grep /); do
+        stow -D $d
+    done
+elif [ "$1" == "-r" ] || [ "$1" == "--reinstall" ]; then
+    for d in $(ls -p | grep /); do
+        stow -R $d
+    done
+else
+    echo "Invalid argument. Aborting."
+fi

@@ -1,0 +1,17 @@
+#
+# post-save hook
+#
+
+# Display notification displaying gcalendar sync status
+output=$(calcurse-caldav 2>&1)
+notify-send -u critical "Google Calendar Synchronization" "$output"
+
+# Append finished tasks to a dump file
+date=$(date "+[%D %I:%M %p]")
+tasks=$(cat ~/.calcurse/todo | grep "^\[0\]" | sed "s|^\[0\]|$date|g")
+if [ -n "$tasks" ]; then
+    echo "$tasks" >> ~/.calcurse/finished
+fi
+
+# Remove finished tasks from main todo list
+sed -i "/^\[0\]/d" ~/.calcurse/todo

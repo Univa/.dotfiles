@@ -1,0 +1,41 @@
+#
+# zathurarc colors
+#
+
+set default-bg "{background}"
+set default-fg "{foreground}"
+
+set recolor true
+set recolor-darkcolor "{foreground}"
+set recolor-lightcolor "{background}"
+
+set inputbar-bg "{background}"
+set inputbar-fg "{foreground}"
+
+set highlight-color "{color2}"
+set highlight-active-color "{color5}"
+
+set notification-bg "{foreground}"
+set notification-fg "{background}"
+
+set statusbar-bg "{background}"
+set statusbar-fg "{foreground}"
+
+set notification-error-bg "{background}"
+set notification-error-fg "{color5}"
+
+set notification-warning-bg "{background}"
+set notification-warning-fg "{color5}"
+
+set render-loading-bg "{background}"
+set render-loading-fg "{foreground}"
+
+set completion-bg "{background}"
+set completion-fg "{foreground}"
+
+set completion-group-bg "{color2}"
+set completion-group-fg "{foreground}"
+
+set completion-highlight-bg "{background}"
+set completion-highlight-fg "{color5}"
+

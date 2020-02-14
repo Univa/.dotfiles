@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+
+#
+# run-programs
+#
+
+force=false
+
+helptext=\
+"Usage: run-programs (args)
+Description:
+    Runs various essential programs including if they haven't started. If the
+    any background programs are already running, then they will be reloaded by
+    sending SIGUSR1, unless --force is specified.
+
+Options:
+    -f, --force         Force background programs to reload (polybar, dunst,
+                        sxhkd, picom)"
+
+while [ $# -ne 0 ]; do
+    opt="$1"
+    case "$opt" in
+        -f|--force)
+            force=true
+            shift
+            ;;
+        -?|-h|--help)
+            echo "$helptext"
+            exit 0
+            ;;
+        *)
+            shift
+            ;;
+    esac
+done
+
+# Create bars if they're not open, reload them if open
+if ! pgrep -u ${USER} -x "polybar" > /dev/null; then
+    for monitor in $(polybar -m | grep ": " | cut -d ":" -f1); do
+        MONITOR=$monitor polybar 1 &
+        MONITOR=$monitor polybar 2 &
+        MONITOR=$monitor polybar 3 &
+        MONITOR=$monitor polybar 4 &
+        MONITOR=$monitor polybar 5 &
+    done
+elif [ $force = "true" ]; then
+    pkill -u ${USER} polybar
+    for monitor in $(polybar -m | grep ": " | cut -d ":" -f1); do
+        MONITOR=$monitor polybar 1 &
+        MONITOR=$monitor polybar 2 &
+        MONITOR=$monitor polybar 3 &
+        MONITOR=$monitor polybar 4 &
+        MONITOR=$monitor polybar 5 &
+    done
+else
+    pkill -u ${USER} -USR1 polybar
+fi
+
+# Start sxhkd if not running, reload if running
+if ! pgrep -u ${USER} -x "sxhkd" > /dev/null; then
+    sxhkd &
+elif [ $force = "true" ]; then
+    pkill -u ${USER} sxhkd
+    sxhkd &
+else
+    pkill -u ${USER} -USR1 sxhkd
+fi
+
+# Start picom if not running, reload if running
+if ! pgrep -u ${USER} -x "picom" > /dev/null; then
+    picom &
+elif [ $force = "true" ]; then
+    pkill -u ${USER} picom
+    picom &
+else
+    pkill -u ${USER} -USR1 picom
+fi
+
+# Dunst starts automatically once a notification is sent, so just kill it
+pkill -u ${USER} dunst
+
+# Run firefox if it's not running
+if ! pgrep -u ${USER} -x "firefox" > /dev/null; then
+    firefox &
+fi
+
+# Run discord if it's not running
+if ! pgrep -u ${USER} -x "Discord" > /dev/null; then
+    discord &
+fi
+
+# Run calcurse inside a new urxvt instance if it's not running
+if ! pgrep -u ${USER} -x "calcurse" > /dev/null; then
+    urxvt -name calcurse -e calcurse &
+fi
+
+# Run spotify if it's not running
+if ! pgrep -u ${USER} -x "spotify" > /dev/null; then
+    bspc desktop --focus ^7 && spotify &
+fi
+
+notify-send "Main programs loaded"
+

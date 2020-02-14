@@ -1,0 +1,166 @@
+#!/usr/bin/env bash
+
+#
+# set-colors
+#
+
+# Default options
+opacity=100
+blur=false
+oomox=true
+apps=true
+setbg=true
+
+helptext=\
+"Usage:
+    set-colors [OPTIONS]... PATH
+
+    PATH can either be a file, or a directory. If a directory is given, a
+    random file will be selected.
+
+Description:
+    Script that uses pywal to generate a colour scheme, and applies it to
+    various programs.
+    Since the colours are modified by an external script (wal-alpha) after
+    pywal generates them, this script is used to reload the environment without
+    having to do it manually.
+    This script is separate from wal-alpha to allow for flexibility in how the
+    environment is reloaded.
+
+Options:
+    -o, --opacity       Set the opacity for argb colours. (95% by default)
+    -b, --blur          Blur the given image
+    -g, --no-gtk        Skip generating the gtk2/3 theme
+    -r, --no-reload     Skip reloading polybar, dunst, bspwm border
+    -w, --no-bg         Skip setting the background
+    -?, -h, --help      Show this help text"
+
+if [ $# -eq 0 ]; then
+    echo "ERROR: No arguments given"
+    echo "$helptext"
+    exit 2
+fi
+
+while [ $# -ne 0 ]; do
+    opt="$1" 
+    case "$opt" in
+        -o|--opacity)
+            shift
+            opacity=$1
+            shift
+            ;;
+        -b|--blur)
+            blur=true
+            shift
+            ;;
+        -g|--no-gtk)
+            oomox=false
+            shift
+            ;;
+        -r|--no-reload)
+            apps=false
+            shift
+            ;;
+        -w|--no-bg)
+            setbg=false
+            shift
+            ;;
+        -?|-h|--help)
+            echo "$helptext"
+            exit 0
+            ;;
+        *) 
+            if [ -f "$1" ]; then
+                bgdir="$(dirname $1)"
+                bgfile="$(basename $1)"
+            elif [ -d "$1" ]; then
+                bgdir="$1"
+                bgfile="$(ls -p $bgdir | grep -v ".*/" | sort -R | head -1)"
+            else
+                echo 1>&2 "ERROR: $1 does not exist"
+                exit 1
+            fi
+            shift
+            ;;
+    esac
+done
+
+echo "$bgdir/$bgfile"
+
+# Use a theme if the file is bg.png, otherwise generate the colors normally
+if [ "$bgfile" = "bg.png" ]; then
+    wal -ten --theme "${HOME}/.config/wal/colorschemes/dark/flat"
+else
+    wal -teni "$bgdir/$bgfile" -a "$opacity"
+fi
+
+# Save the exit status of pywal
+exitstatus=$?
+
+# wal-alpha converts the given opacity value into more formats for use in many 
+# config files.
+wal-alpha
+
+# If pywal wasn't successful, abort the script
+if ! [ $exitstatus -eq 0 ]; then
+    echo 1>&2 "ERROR: pywal could not process the file"
+    exit 2
+fi
+
+# Create gtk-2.0 and gtk-3.0 theme
+if [ "$oomox" = true ]; then
+    oomox-cli -o wal "${HOME}/.cache/wal/colors-oomox"
+fi
+
+if [ "$apps" = true ]; then
+    # Reload polybar
+    pkill -u ${USER} -USR1 polybar
+
+    # Update dunstrc with the new colors
+    dunst_xr_theme_changer
+
+    # Reload dunst
+    pkill -u ${USER} dunst
+
+    # Grab the colors from colors.sh to set the colors of window borders
+    colors="${HOME}/.cache/wal/colors.sh"
+
+    bspc config focused_border_color \
+    "$(cat $colors | grep -w "color5" | cut -d "=" -f2 | tr -d "\'")"
+
+    bspc config active_border_color \
+    "$(cat $colors | grep -w "color2" | cut -d "=" -f2 | tr -d "\'")"
+
+    bspc config normal_border_color \
+    "$(cat $colors | grep -w "color2" | cut -d "=" -f2 | tr -d "\'")"
+fi
+
+if [ "$blur" = true ]; then
+    ext="${bgfile##*.}"
+    # Add blur to the selected background (takes a long time on gifs)
+    convert -blur 0x25 "$bgdir/$bgfile" "$bgdir/blurbg.$ext"
+    bgfile="blurbg.$ext"
+    echo "$bgdir/$bgfile" > ${HOME}/.cache/wal/wal
+fi
+
+if [ "$setbg" = true ]; then
+    # Kill xwinwrap if it was previously running
+    while pgrep -u ${USER} -x "xwinwrap" > /dev/null; do sleep 0.05;
+        pkill -u ${USER} "xwinwrap"; done
+
+    # Use xwinwrap to play a gif in mpv in the background, otherwise use feh
+    if [[ $bgfile == *.gif ]]; then
+        for geometry in $(xrandr | grep -w "connected" |\
+        grep -o '[0-9]*x[0-9]*+[0-9]*+[0-9]*'); do
+            xwinwrap -ov -ni -nf -g $geometry -b -- \
+            mpv -wid WID  --no-config --loop --no-audio --no-sub \
+            --x11-bypass-compositor=no --hwdec=auto --really-quiet \
+            "$bgdir/$bgfile" &
+        done
+    else
+        feh --no-fehbg --bg-scale "$bgdir/$bgfile"
+    fi
+fi
+
+notify-send "Colors updated"
+

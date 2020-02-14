@@ -1,0 +1,390 @@
+;
+; polybar config
+;
+
+;
+; Colors
+;
+
+[colors]
+bg = ${xrdb:argbbackground:#222}
+fg = ${xrdb:foreground:#222}
+border = ${xrdb:color2:#222}
+empty = ${xrdb:color0:#222}
+active = ${xrdb:color2:#222}
+focus = ${xrdb:color5:#222}
+urgent = ${xrdb:color7:#222}
+
+;
+; Settings that apply to all bars
+;
+
+[main]
+height = 21
+radius = 0
+
+border-size = 2
+
+offset-y = 1.8519%
+
+wm-restack = bspwm
+fixed-center = true
+
+font-0 = "cherry-11;3"
+font-1 = "Siji;3"
+
+padding = 2
+module-margin = 2
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+;
+; Bar 1: volume
+;
+
+[bar/1]
+monitor = ${env:MONITOR:}
+
+width = 10%
+height = ${main.height}
+radius = ${main.radius}
+
+border-size = ${main.border-size}
+border-color = ${colors.border}
+
+offset-y = ${main.offset-y}
+offset-x = 1.0417%
+
+wm-restack = ${main.wm-restack}
+fixed-center = ${main.fixed-center}
+
+background = ${colors.bg}
+foreground = ${colors.fg}
+
+font-0 = ${main.font-0}
+font-1 = ${main.font-1}
+
+modules-center = volume
+
+module-margin = ${main.module-margin}
+
+cursor-click = ${main.cursor-click}
+cursor-scroll = ${main.cursor-scroll}
+
+;
+; Bar 2: spotify (custom script)
+;
+
+[bar/2]
+monitor = ${env:MONITOR:}
+
+width = 25%
+height = ${main.height}
+radius = ${main.radius}
+
+border-size = ${main.border-size}
+border-color = ${colors.border}
+
+offset-y = ${main.offset-y}
+offset-x = 13.0209%
+
+wm-restack = ${main.wm-restack}
+fixed-center = ${main.fixed-center}
+
+background = ${colors.bg}
+foreground = ${colors.fg}
+
+font-0 = ${main.font-0}
+font-1 = ${main.font-1}
+
+modules-center = spotify
+
+module-margin = ${main.module-margin}
+
+cursor-click = ${main.cursor-click}
+cursor-scroll = ${main.cursor-scroll}
+
+;
+; Bar 3: bspwm desktops
+;
+
+[bar/3]
+monitor = ${env:MONITOR:}
+
+width = 20%
+height = ${main.height}
+radius = ${main.radius}
+
+border-size = ${main.border-size}
+border-color = ${colors.border}
+
+offset-y = ${main.offset-y}
+offset-x = 40%
+
+wm-restack = ${main.wm-restack}
+fixed-center = ${main.fixed-center}
+
+background = ${colors.bg}
+foreground = ${colors.fg}
+
+font-0 = ${main.font-0}
+font-1 = ${main.font-1}
+
+modules-center = bspwm
+
+module-margin = ${main.module-margin}
+
+cursor-click = ${main.cursor-click}
+cursor-scroll = ${main.cursor-scroll}
+
+;
+; Bar 4: System Info
+;
+
+[bar/4]
+monitor = ${env:MONITOR:}
+
+width = 25%
+height = ${main.height}
+radius = ${main.radius}
+
+border-size = ${main.border-size}
+border-color = ${colors.border}
+
+offset-y = ${main.offset-y}
+offset-x = 61.9792%
+
+wm-restack = ${main.wm-restack}
+fixed-center = ${main.fixed-center}
+
+background = ${colors.bg}
+foreground = ${colors.fg}
+
+font-0 = ${main.font-0}
+font-1 = ${main.font-1}
+
+modules-center = cpu memory filesystem battery wired-network wireless-network
+
+module-margin = ${main.module-margin}
+
+cursor-click = ${main.cursor-click}
+cursor-scroll = ${main.cursor-scroll}
+
+;
+; Bar 5: date
+;
+
+[bar/5]
+monitor = ${env:MONITOR:}
+
+width = 10%
+height = ${main.height}
+radius = ${main.radius}
+
+border-size = ${main.border-size}
+border-color = ${colors.border}
+
+offset-y = ${main.offset-y}
+offset-x = 88.959%
+
+wm-restack = ${main.wm-restack}
+fixed-center = ${main.fixed-center}
+
+background = ${colors.bg}
+foreground = ${colors.fg}
+
+font-0 = ${main.font-0}
+font-1 = ${main.font-1}
+
+modules-center = date
+
+module-margin = ${main.module-margin}
+
+cursor-click = ${main.cursor-click}
+cursor-scroll = ${main.cursor-scroll}
+
+[bar/top]
+monitor = ${env:MONITOR:}
+
+width = 1910
+height = ${main.height}
+radius = ${main.radius}
+
+border-size = ${main.border-size}
+border-color = ${colors.border}
+
+offset-y = ${main.offset-y}
+offset-x = 5
+
+wm-restack = ${main.wm-restack}
+b
+fixed-center = ${main.fixed-center}
+
+background = ${colors.bg}
+foreground = ${colors.fg}
+
+font-0 = ${main.font-0}
+font-1 = ${main.font-1}
+
+modules-left = volume
+modules-center = bspwm
+modules-right = date
+
+padding = ${main.padding}
+module-margin = ${main.module-margin}
+
+cursor-click = ${main.cursor-click}
+cursor-scroll = ${main.cursor-scroll}
+
+[bar/bottom]
+monitor = ${env:MONITOR:}
+
+width = ${bar/top.width}
+height = ${main.height}
+radius = ${main.radius}
+
+border-size = ${main.border-size}
+border-color = ${colors.border}
+
+offset-y = ${main.offset-y}
+offset-x = ${main.offset-x}
+bottom = true
+
+wm-restack = ${main.wm-restack}
+fixed-center = ${main.fixed-center}
+
+background = ${colors.bg}
+foreground = ${colors.fg}
+
+font-0 = ${main.font-0}
+font-1 = ${main.font-1}
+
+modules-left = spotify
+modules-right = cpu memory
+
+padding = ${main.padding}
+module-margin = ${main.module-margin}
+
+cursor-click = ${main.cursor-click}
+cursor-scroll = ${main.cursor-scroll}
+
+[module/bspwm]
+type = internal/bspwm
+
+label-focused = 
+label-focused-margin = 2
+label-focused-foreground = ${colors.focus}
+
+label-occupied = 
+label-occupied-padding = ${self.label-focused-margin}
+label-occupied-foreground = ${colors.active}
+
+label-empty = 
+label-empty-margin = ${self.label-focused-margin}
+label-empty-foreground = ${colors.empty}
+
+label-urgent = 
+label-urgent-margin = ${self.label-focused-margin}
+label-urgent-foreground = ${colors.urgent}
+
+[module/spotify]
+type = custom/script
+interval = 2
+
+exec = spotify-status
+
+format-prefix = " "
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+
+format-suffix = " "
+
+label = %percentage:2%%
+
+[module/memory]
+type = internal/memory
+interval = 2
+
+format-suffix = " "
+
+label = %percentage_used%%
+
+[module/date]
+type = internal/date
+interval = 1
+
+time = %l:%M %p
+time-alt = %D
+label = %time% 
+
+[module/volume]
+type = internal/pulseaudio
+
+format-volume = <ramp-volume> <label-volume>
+
+label-volume = %percentage%%
+
+label-muted =  Muted
+
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+
+[module/filesystem]
+type = internal/fs
+interval = 2
+
+mount-0 = /
+
+format-mounted = <label-mounted>
+format-unmounted = <label-unmounted>
+
+label-mounted = %percentage_used%% 
+label-unmounted = Error 
+
+[module/battery]
+type = internal/battery
+interval = 1
+
+battery = BAT1
+adapter = ADP1
+
+format-charging = <label-charging> 
+format-discharging = <label-discharging> <ramp-capacity>
+
+label-charging = %percentage%%
+label-discharging = %percentage%%
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+
+[module/wired-network]
+type = internal/network
+interval = 2
+interface = enp0s31f6
+
+format-connected = <label-connected>
+format-disconnected = <label-disconnected>
+
+label-connected = %downspeed% 
+label-disconnected = DCed 
+
+[module/wireless-network]
+type = internal/network
+interval = 2
+interface = wlp58s0
+
+format-connected = <label-connected>
+format-disconnected = <label-disconnected>
+
+label-connected = %essid%: %downspeed% 
+label-disconnected = DCed 
+
+[settings]
+screenchange-reload = true
+
