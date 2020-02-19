@@ -1,6 +1,6 @@
 # univa's dotfiles
 
-![image1](https://user-images.githubusercontent.com/33074023/74868074-babb0180-5323-11ea-8913-2095d9834cb6.gif)
+![image1](https://user-images.githubusercontent.com/33074023/74877947-505e8d00-5334-11ea-98d7-22973f666e18.gif)
 ![image2](https://user-images.githubusercontent.com/33074023/74868069-b8f13e00-5323-11ea-8eda-cd6a43fdf5f9.gif)
 
 hi these are my linux dotfiles.
@@ -32,6 +32,8 @@ based on the wallpaper
 - a lot of wallpapers
 - x11 configuration
 - zathura configuration
+
+p.s. i use urxvt
 
 ## Installation
 
@@ -65,5 +67,12 @@ If you just want to install everything, you can run the included script:
 - [cherry](https://github.com/turquoise-hexagon/cherry)
 - [Siji](https://github.com/stark/siji)
 - [Iosevka Term SS09](https://github.com/be5invis/Iosevka)
+
+**My sxhkd config makes use of these programs as well:**
+- urxvt
+- pactl (from PulseAudio)
+- [light](https://github.com/haikarainen/light)
+- [xclip](https://github.com/astrand/xclip)
+- [maim](https://github.com/naelstrof/maim)
 
 ### Quick disclaimer: I don't own any of the wallpapers shared in this repo
