@@ -1,3 +1,9 @@
+[submodule "vim/.vim/plugged/wal.vim"]
+	path = vim/.vim/plugged/wal.vim
+	url = https://github.com/dylanaraps/wal.vim
+[submodule "vim/.vim/plugged/vim-airline"]
+	path = vim/.vim/plugged/vim-airline
+	url = https://github.com/vim-airline/vim-airline
 [submodule "vim/.vim/plugged/nerdtree"]
 	path = vim/.vim/plugged/nerdtree
 	url = https://github.com/preservim/nerdtree
