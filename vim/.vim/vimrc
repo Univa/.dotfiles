@@ -9,9 +9,14 @@ call plug#begin('~/.vim/plugged')
 Plug 'lervag/vimtex'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
+Plug 'vim-airline/vim-airline'
+Plug 'dylanaraps/wal.vim'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
+
+" set colorscheme to use wal
+colorscheme wal
 
 " Tab settings
 set expandtab
@@ -20,7 +25,13 @@ set softtabstop=4
 set tabstop=4
 
 " Show line numbers
+set relativenumber
 set number
+autocmd InsertEnter * :set norelativenumber 
+autocmd InsertLeave * :set relativenumber
+
+" Use powerline fonts on airline
+let g:airline_powerline_fonts = 1
 
 " Show a visual ruler
 highlight ColorColumn ctermbg=1
