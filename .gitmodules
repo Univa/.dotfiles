@@ -13,3 +13,6 @@
 [submodule "vim/.vim/plugged/vimtex"]
 	path = vim/.vim/plugged/vimtex
 	url = https://github.com/lervag/vimtex
+[submodule "vim/.vim/plugged/vim-surround"]
+	path = vim/.vim/plugged/vim-surround
+	url = https://github.com/tpope/vim-surround
