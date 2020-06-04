@@ -1,0 +1,29 @@
+#!/bin/bash
+
+cachefile="${HOME}/.cache/monitors"
+
+if [ $# -ne 0 ]; then
+    echo "$@"| tr " " "\n" > $cachefile
+    echo "Monitor order: $@"
+    # Set up the monitor positions
+    while [ $# -ne 0 ]; do
+        [ ! -z "$left" ] && xrandr --output $1 --right-of $left
+        left=$1
+        shift
+    done
+elif [ -f "$cachefile" ]; then
+    echo "Using cache file $cachefile"
+    echo "Monitor order: $(cat $cachefile | tr "\n" " ")"
+    for monitor in $(cat $cachefile); do
+        [ ! -z "$left" ] && xrandr --output $monitor --right-of $left
+        left=$monitor
+    done
+else
+    echo "No cache file found. Using order of appearance in xrandr"
+    echo "Monitor order: $(xrandr | grep -w "connected" | cut -d ' ' -f1 | tr "\n" " ")"
+    for monitor in $(xrandr | grep -w "connected" | cut -d ' ' -f1); do
+        [ ! -z "$left" ] && xrandr --output $monitor --right-of $left
+        left=$monitor
+    done
+fi
+

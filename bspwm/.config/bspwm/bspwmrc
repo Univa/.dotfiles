@@ -4,12 +4,12 @@
 # bspwmrc
 #
 
-# Restore previous colorscheme
-set-colors $(cat ${HOME}/.cache/wal/wal) -o $(cat ${HOME}/.cache/wal/alpha)
-
 desktops=(I II III IV V VI VII VIII IX X)
 size=$((${#desktops[@]} / $(xrandr | grep -w "connected" | wc -l)))
 pos=0
+
+# Fix positioning of monitors
+fix-monitors
 
 # Set up the first monitor as the primary monitor
 xrandr --output $(xrandr | grep -w "connected" | cut -d ' ' -f1 | head -n 1) --primary
@@ -20,6 +20,9 @@ for monitor in $(xrandr | grep -w "connected" | cut -d ' ' -f1); do
     bspc monitor $monitor -d ${desktops[@]:$(($size * $pos)):$size}
     pos=$((pos + 1))
 done
+
+# Restore previous colorscheme
+set-colors $(cat ${HOME}/.cache/wal/wal) -o $(cat ${HOME}/.cache/wal/alpha)
 
 bspc rule -r *:*
 bspc rule -a firefox desktop=^1 follow=on
